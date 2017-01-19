@@ -15,6 +15,6 @@ then
     FOREIGN="--foreign"
 fi
 
-apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
+sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
 mkdir ${CHROOT_DIR}
 sudo debootstrap ${FOREIGN} --no-check-gpg --include=${CHROOT_PACKAGES} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
