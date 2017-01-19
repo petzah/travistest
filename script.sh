@@ -9,6 +9,7 @@ TRAVIS_DEBIAN_MIRROR="${TRAVIS_DEBIAN_MIRROR:-http://httpredir.debian.org/debian
 HOST_PACKAGES="debootstrap qemu-user-static binfmt-support sbuild"
 CHROOT_DIR="$(pwd)/chroot"
 CHROOT_PACKAGES="fakeroot,build-essential,locales"
+CHROOT_PACKAGES_EXCLUDE="systemd-sysv"
 
 if [ "${TRAVIS_DEBIAN_TARGET_ARCH}" != "$(dpkg --print-architecture)" ]
 then
@@ -17,7 +18,7 @@ fi
 
 sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
 mkdir ${CHROOT_DIR}
-sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --include=${CHROOT_PACKAGES} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
+sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --include=${CHROOT_PACKAGES} --exclude=${CHROOT_PACKAGES_EXCLUDE} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 sudo cp /usr/bin/qemu-${TRAVIS_DEBIAN_TARGET_ARCH}-static ${CHROOT_DIR}/usr/bin/
 sudo tail -f ${CHROOT_DIR}/debootstrap/debootstrap.log &
 sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
