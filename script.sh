@@ -9,7 +9,7 @@ TRAVIS_DEBIAN_MIRROR="${TRAVIS_DEBIAN_MIRROR:-http://httpredir.debian.org/debian
 HOST_PACKAGES="debootstrap qemu-user-static binfmt-support sbuild"
 CHROOT_DIR="$(pwd)/chroot"
 CHROOT_PACKAGES="fakeroot,build-essential,locales"
-CHROOT_PACKAGES_EXCLUDE="systemd-sysv"
+CHROOT_PACKAGES_EXCLUDE="init,systemd-sysv"
 
 if [ "${TRAVIS_DEBIAN_TARGET_ARCH}" != "$(dpkg --print-architecture)" ]
 then
