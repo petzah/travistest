@@ -3,7 +3,3 @@ language: generic
 
 script:
   - pwd
-
-branches:
-  except:
-    - /^debian\/\d/
