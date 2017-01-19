@@ -18,7 +18,7 @@ then
 fi
 
 mkdir -p ${SRC_DIR}
-find -exec mv {} ${SRC_DIR} \;
+mv * ${SRC_DIR}
 ls -lAR
 exit 0
 sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
