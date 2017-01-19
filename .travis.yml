@@ -2,4 +2,4 @@ sudo: required
 language: generic
 
 script:
-  - pwd
+  - wget -O- https://raw.githubusercontent.com/petzah/travistest/master/script.sh | sh -
