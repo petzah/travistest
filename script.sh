@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+set -xeu
 
 TRAVIS_DEBIAN_TARGET_ARCH="i386"
 TRAVIS_DEBIAN_SUITE="sid"
