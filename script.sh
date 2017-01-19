@@ -17,10 +17,9 @@ then
     FOREIGN="--foreign"
 fi
 
-mkdir ${SRC_DIR}
+mkdir -p ${SRC_DIR}
 find -exec mv {} ${SRC_DIR} \;
 ls -lAR
-mkdir ${CHROOT_DIR}
 exit 0
 sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
 sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --include=${CHROOT_PACKAGES} --exclude=${CHROOT_PACKAGES_EXCLUDE} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
