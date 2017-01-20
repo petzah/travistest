@@ -1,0 +1,64 @@
+From: Adam Borowski <kilobyte@angband.pl>
+Date: Sat, 23 Jul 2016 00:59:53 +0200
+Subject: Open the target O_RDONLY for root for BTRFS_IOC_FILE_EXTENT_SAME.
+
+Both in duperemove and btrfs-extent-same.
+
+This partially fixes the ETXTBSY failure when deduping a live filesystem
+that has executables someone might want to exec while we open the file.
+
+Really, we want to check CAP_SYS_ADMIN rather than root, but I don't want
+to introduce a dependency on libpcap for something that's hopefully short
+lived: once it's fixed on the kernel side, this check should compare kernel
+version.
+
+Signed-off-by: Adam Borowski <kilobyte@angband.pl>
+---
+ btrfs-extent-same.c | 2 +-
+ duperemove.8        | 5 +++--
+ duperemove.c        | 3 +++
+ 3 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/btrfs-extent-same.c b/btrfs-extent-same.c
+index 8ce07e9..a5417f6 100644
+--- a/btrfs-extent-same.c
++++ b/btrfs-extent-same.c
+@@ -106,7 +106,7 @@ int main(int argc, char **argv)
+ 	for (i = 0; i < same->dest_count; i++) {
+ 		destf = argv[4 + (i * 2)];
+ 
+-		ret = open(destf, O_WRONLY);
++		ret = open(destf, geteuid() ? O_WRONLY : O_RDONLY);
+ 		if (ret < 0) {
+ 			ret = errno;
+ 			fprintf(stderr, "Could not open file %s: (%d) %s\n",
+diff --git a/duperemove.8 b/duperemove.8
+index dcf7796..f182fc0 100644
+--- a/duperemove.8
++++ b/duperemove.8
+@@ -68,8 +68,9 @@ De-dupe the results - only works on \fIbtrfs\fR and \fIxfs (experimental)\FR.
+ 
+ .TP
+ \fB\-A\fR
+-Opens files readonly when deduping. Primarily for use by privileged
+-users on readonly snapshots.
++Opens files readonly when deduping; currently requires root privileges
++(and is enabled by default for root). Allows use on readonly snapshots
++or when the file might be open for exec.
+ 
+ .TP
+ \fB\-h\fR
+diff --git a/duperemove.c b/duperemove.c
+index 0d5eb3c..a2952ef 100644
+--- a/duperemove.c
++++ b/duperemove.c
+@@ -677,6 +677,9 @@ int main(int argc, char **argv)
+ 	init_results_tree(&res);
+ 	init_hash_tree(&dups_tree);
+ 
++	if (!geteuid())
++		target_rw = 0;
++
+ 	ret = parse_options(argc, argv, &filelist_idx);
+ 	if (ret || version_only) {
+ 		usage(argv[0]);

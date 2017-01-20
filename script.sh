@@ -8,7 +8,7 @@ TRAVIS_DEBIAN_MIRROR="${TRAVIS_DEBIAN_MIRROR:-http://httpredir.debian.org/debian
 
 HOST_PACKAGES="debootstrap qemu-user-static binfmt-support sbuild"
 CHROOT_DIR="$(pwd)/chroot"
-SRC_DIR="${CHROOT_DIR}/src"
+SRC_DIR="/src"
 CHROOT_PACKAGES="fakeroot,build-essential,locales"
 CHROOT_PACKAGES_EXCLUDE="init,systemd-sysv"
 
@@ -17,10 +17,8 @@ then
     FOREIGN="--foreign"
 fi
 
-mkdir -p ${SRC_DIR}
-mv * .travis.yml .git ${SRC_DIR} || true
-ls -lAR
-exit 0
+mkdir -p ${CHROOT_DIR}/${SRC_DIR}
+mv * .travis.yml .git ${CHROOT_DIR}/${SRC_DIR} || true
 sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
 sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --include=${CHROOT_PACKAGES} --exclude=${CHROOT_PACKAGES_EXCLUDE} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 sudo cp /usr/bin/qemu-${TRAVIS_DEBIAN_TARGET_ARCH}-static ${CHROOT_DIR}/usr/bin/
@@ -29,3 +27,4 @@ sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
 #sudo chroot ${CHROOT_DIR} /usr/sbin/locale-gen
 sudo sbuild-createchroot --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${FOREIGN} --setup-only ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 sudo chroot ${CHROOT_DIR} apt-get update && apt-get dist-upgrade --yes
+sudo chroot ${CHROOT_DIR} mk-build-deps --host-arch ${TRAVIS_DEBIAN_TARGET_ARCH} --install --remove --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' ${SRC_DIR}/debian/control

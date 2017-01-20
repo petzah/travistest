@@ -1,0 +1,19 @@
+Package: duperemove
+Version: 0.11-1
+Architecture: amd64
+Maintainer: Peter Záhradník <peter.zahradnik@znik.sk>
+Installed-Size: 234
+Depends: libc6 (>= 2.14), libglib2.0-0 (>= 2.31.8), libsqlite3-0 (>= 3.7.15)
+Section: admin
+Priority: optional
+Multi-Arch: foreign
+Homepage: https://github.com/markfasheh/duperemove
+Description: extent-based deduplicator for file systems
+ Duperemove is a tool for finding duplicated extents and submitting them for
+ deduplication.  When given a list of files it will hash their contents on a
+ block by block basis and compare those hashes to each other, finding and
+ categorizing extents that match each other.
+ .
+ On BTRFS and, experimentally, XFS, it can then reflink such extents in a
+ race-free way.  Unlike hardlink-based solutions, affected files appear
+ independent in any way other than reduced disk space used.

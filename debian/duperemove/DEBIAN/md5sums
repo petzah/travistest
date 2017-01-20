@@ -1,0 +1,11 @@
+0d7d6e899a7efae6eae9df09b804c57f  usr/bin/btrfs-extent-same
+3dc5d7ce841633163e94b46d812d2a90  usr/bin/duperemove
+d21f81846bbc0615cdb1652b424e3338  usr/bin/hashstats
+881f038cbd03e135c3f5fa9a10321d08  usr/bin/show-shared-extents
+a3627beb111f40b961ccd4324c82a4a3  usr/share/doc/duperemove/README.md.gz
+94c79ae89671d9bfead845f854f8f1b9  usr/share/doc/duperemove/changelog.Debian.gz
+713b43411cc16967eaf134e7c50916bc  usr/share/doc/duperemove/copyright
+a2be14bb93b74188e0c1af22f97fefce  usr/share/man/man8/btrfs-extent-same.8.gz
+b850702aaba2a369e4789c0a2be84b0d  usr/share/man/man8/duperemove.8.gz
+fb64de2643c7301b47e5323262a0fbf3  usr/share/man/man8/hashstats.8.gz
+701018870bb1439886d217dd216c5c3a  usr/share/man/man8/show-shared-extents.8.gz
