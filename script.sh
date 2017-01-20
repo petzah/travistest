@@ -19,6 +19,7 @@ then
 fi
 FOREIGN="${FOREIGN:-}"
 
+add-apt-repository --update --yes 'deb http://ports.ubuntu.com/ubuntu-ports trusty-backports universe'
 mkdir -p ${CHROOT_DIR}/${SRC_DIR} ${CHROOT_DIR}/${BUILD_DIR}
 mv * .travis.yml .git ${CHROOT_DIR}/${SRC_DIR} || true
 sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
