@@ -20,7 +20,7 @@ fi
 FOREIGN="${FOREIGN:-}"
 
 mkdir -p ${CHROOT_DIR}/${SRC_DIR} ${CHROOT_DIR}/${BUILD_DIR}
-mv * .travis.yml .git ${CHROOT_DIR}/${SRC_DIR} || true
+mv * .travis.yml .git .gitignore ${CHROOT_DIR}/${SRC_DIR} || true
 #sudo add-apt-repository --yes 'deb http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse' # we need newer qemu-user-static
 #sudo apt-get update
 sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
