@@ -27,7 +27,7 @@ sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
 #sudo chroot ${CHROOT_DIR} /usr/sbin/locale-gen
 sudo sbuild-createchroot --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${FOREIGN} --setup-only ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 
-sudo chroot ${CHROOT_DIR} /bin/bash -x <<'EOF'
+sudo chroot ${CHROOT_DIR} /bin/bash -x <<EOF
 apt-get update 
 apt-get --yes dist-upgrade
 apt-get --yes install devscripts
