@@ -32,7 +32,7 @@ sudo sbuild-createchroot --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${FOREIGN} --setup-
 sudo chroot ${CHROOT_DIR} /bin/bash -x <<EOF
 apt-get update 
 apt-get --yes dist-upgrade
-apt-get --yes install devscripts pkg-config gbp-buildpackage
+apt-get --yes install devscripts pkg-config git-buildpackage
 mk-build-deps --host-arch ${TRAVIS_DEBIAN_TARGET_ARCH} --install --remove --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' ${SRC_DIR}/debian/control
 cd ${SRC_DIR}
 gbp buildpackage ${TRAVIS_DEBIAN_GIT_BUILDPACKAGE_OPTIONS} --git-ignore-branch --git-export-dir=${BUILD_DIR} --git-builder='debuild -i -I -uc -us -sa'
