@@ -38,8 +38,8 @@ sudo chroot ${CHROOT_DIR} /bin/bash -x <<EOF
 apt-get install --yes --no-install-recommends devscripts pkg-config git-buildpackage equivs locales
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
-mk-build-deps --install --remove --tool "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes" ${SRC_DIR}/debian/control
 cd ${SRC_DIR}
+mk-build-deps --install --remove --tool "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes" debian/control
 git checkout .travis.yml || true
 for X in \$(git branch -r | grep -v HEAD); do git branch --track \$(echo "\${X}" | perl -pe 's:^.*?/::') \${X} || true; done
 gbp buildpackage ${TRAVIS_DEBIAN_GIT_BUILDPACKAGE_OPTIONS} --git-ignore-branch --git-export-dir=${BUILD_DIR} --git-builder='debuild -i -I -uc -us -sa'
