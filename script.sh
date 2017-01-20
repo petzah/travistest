@@ -13,6 +13,34 @@ BUILD_DIR="/build"
 CHROOT_PACKAGES="fakeroot,build-essential,locales"
 CHROOT_PACKAGES_EXCLUDE="init,systemd-sysv"
 
+# borrowed from qemu-debootstrap
+case "${TRAVIS_DEBIAN_TARGET_ARCH}" in
+  alpha|arm|armeb|i386|m68k|mips|mipsel|mips64el|ppc64|sh4|sh4eb|sparc|sparc64|s390x)
+    qemu_arch="${TRAVIS_DEBIAN_TARGET_ARCH}"
+  ;;
+  amd64)
+    qemu_arch="x86_64"
+  ;;
+  armel|armhf)
+    qemu_arch="arm"
+  ;;
+  arm64)
+    qemu_arch="aarch64"
+  ;;
+  lpia)
+    qemu_arch="i386"
+  ;;
+  powerpc|powerpcspe)
+    qemu_arch="ppc"
+  ;;
+  ppc64el)
+    qemu_arch="ppc64le"
+  ;;
+  *)
+    die "Sorry, I don't know how to support arch %s" "$arch"
+  ;;
+esac
+
 if [ "${TRAVIS_DEBIAN_TARGET_ARCH}" != "$(dpkg --print-architecture)" ]
 then
     FOREIGN="--foreign"
@@ -29,7 +57,7 @@ sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
 sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --include=${CHROOT_PACKAGES} --exclude=${CHROOT_PACKAGES_EXCLUDE} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 if [ ! -z "${FOREIGN}" ]
 then
-    sudo cp /usr/bin/qemu-$(dpkg-architecture -a${TRAVIS_DEBIAN_TARGET_ARCH} -qDEB_HOST_GNU_CPU)-static ${CHROOT_DIR}/usr/bin/
+    sudo cp /usr/bin/qemu-${qemu_arch}-static ${CHROOT_DIR}/usr/bin/
     sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
 fi
 sudo sbuild-createchroot --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${FOREIGN} --setup-only ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
