@@ -36,7 +36,7 @@ sudo chroot ${CHROOT_DIR} /bin/bash -x <<EOF
 apt-get install --yes --no-install-recommends devscripts pkg-config git-buildpackage equivs locales
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
-mk-build-deps --install --remove --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' ${SRC_DIR}/debian/control
+mk-build-deps --install --remove --tool \'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes\' ${SRC_DIR}/debian/control
 cd ${SRC_DIR}
 git checkout .travis.yml || true
 git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
