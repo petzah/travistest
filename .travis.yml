@@ -4,3 +4,20 @@ language: generic
 
 script:
   - wget -O- https://raw.githubusercontent.com/petzah/travistest/master/script.sh | sh -
+env:
+  global:
+    - TRAVIS_DEBIAN_GIT_BUILDPACKAGE_OPTIONS="--git-upstream-tag=v%\(version\)s-branch"
+    - TRAVIS_DEBIAN_DISTRIBUTION=sid 
+  matrix:
+    - TRAVIS_DEBIAN_TARGET_ARCH=amd64
+    - TRAVIS_DEBIAN_TARGET_ARCH=armhf
+    - TRAVIS_DEBIAN_TARGET_ARCH=arm64
+    - TRAVIS_DEBIAN_TARGET_ARCH=armel
+    - TRAVIS_DEBIAN_TARGET_ARCH=mipsel
+    - TRAVIS_DEBIAN_TARGET_ARCH=ppc64el
+    - TRAVIS_DEBIAN_TARGET_ARCH=amd64
+    - TRAVIS_DEBIAN_TARGET_ARCH=armhf
+    - TRAVIS_DEBIAN_TARGET_ARCH=arm64
+    - TRAVIS_DEBIAN_TARGET_ARCH=armel
+    - TRAVIS_DEBIAN_TARGET_ARCH=mipsel
+    - TRAVIS_DEBIAN_TARGET_ARCH=ppc64el

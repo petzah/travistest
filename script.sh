@@ -1,11 +1,10 @@
 #!/bin/sh
 set -xeu
 
-TRAVIS_DEBIAN_TARGET_ARCH="armhf"
-TRAVIS_DEBIAN_SUITE="sid"
+TRAVIS_DEBIAN_TARGET_ARCH="${TRAVIS_DEBIAN_TARGET_ARCH:-$(dpkg --print-architecture)}"
+TRAVIS_DEBIAN_SUITE="${TRAVIS_DEBIAN_SUITE:-}"
 TRAVIS_DEBIAN_MIRROR="${TRAVIS_DEBIAN_MIRROR:-http://httpredir.debian.org/debian/}"
 TRAVIS_DEBIAN_GIT_BUILDPACKAGE_OPTIONS="${TRAVIS_DEBIAN_GIT_BUILDPACKAGE_OPTIONS:-}"
-
 
 HOST_PACKAGES="debootstrap qemu-user-static binfmt-support sbuild"
 CHROOT_DIR="$(pwd)/chroot"
@@ -33,6 +32,10 @@ sudo chroot ${CHROOT_DIR} /bin/bash -x <<EOF
 apt-get install --yes --no-install-recommends devscripts pkg-config git-buildpackage
 mk-build-deps --host-arch ${TRAVIS_DEBIAN_TARGET_ARCH} --install --remove --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' ${SRC_DIR}/debian/control
 cd ${SRC_DIR}
+git checkout .travis.yml || true
+git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+git fetch
+for X in \$(git branch -r | grep -v HEAD); do git branch --track \$(echo "\${X}" | perl -pe 's:^.*?/::') \${X} || true; done
 gbp buildpackage ${TRAVIS_DEBIAN_GIT_BUILDPACKAGE_OPTIONS} --git-ignore-branch --git-export-dir=${BUILD_DIR} --git-builder='debuild -i -I -uc -us -sa'
 ls -l ${BUILD_DIR}
 EOF
