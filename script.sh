@@ -20,6 +20,8 @@ fi
 FOREIGN="${FOREIGN:-}"
 
 mkdir -p ${CHROOT_DIR}/${SRC_DIR} ${CHROOT_DIR}/${BUILD_DIR}
+git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+git fetch
 mv * .travis.yml .git .gitignore ${CHROOT_DIR}/${SRC_DIR} || true
 #sudo add-apt-repository --yes 'deb http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse' # we need newer qemu-user-static
 #sudo apt-get update
@@ -39,8 +41,6 @@ locale-gen
 mk-build-deps --install --remove --tool "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes" ${SRC_DIR}/debian/control
 cd ${SRC_DIR}
 git checkout .travis.yml || true
-git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
-git fetch
 for X in \$(git branch -r | grep -v HEAD); do git branch --track \$(echo "\${X}" | perl -pe 's:^.*?/::') \${X} || true; done
 gbp buildpackage ${TRAVIS_DEBIAN_GIT_BUILDPACKAGE_OPTIONS} --git-ignore-branch --git-export-dir=${BUILD_DIR} --git-builder='debuild -i -I -uc -us -sa'
 ls -l ${BUILD_DIR}
