@@ -27,6 +27,6 @@ sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
 #sudo chroot ${CHROOT_DIR} /usr/sbin/locale-gen
 sudo sbuild-createchroot --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${FOREIGN} --setup-only ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 sudo chroot ${CHROOT_DIR} apt-get update 
-sudo chroot ${CHROOT_DIR} apt-get dist-upgrade --yes
-sudo chroot ${CHROOT_DIR} apt-get install devscripts
+sudo chroot ${CHROOT_DIR} apt-get --yes dist-upgrade
+sudo chroot ${CHROOT_DIR} apt-get --yes install devscripts
 sudo chroot ${CHROOT_DIR} mk-build-deps --host-arch ${TRAVIS_DEBIAN_TARGET_ARCH} --install --remove --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' ${SRC_DIR}/debian/control
