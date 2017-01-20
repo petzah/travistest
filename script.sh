@@ -30,12 +30,12 @@ then
     sudo cp /usr/bin/qemu-$(dpkg-architecture -a${TRAVIS_DEBIAN_TARGET_ARCH} -qDEB_HOST_GNU_CPU)-static ${CHROOT_DIR}/usr/bin/
 fi
 sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
-#sudo echo "en_US.UTF-8 UTF-8" >> ${CHROOT_DIR}/etc/locale.gen
-#sudo chroot ${CHROOT_DIR} /usr/sbin/locale-gen
 sudo sbuild-createchroot --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${FOREIGN} --setup-only ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 
 sudo chroot ${CHROOT_DIR} /bin/bash -x <<EOF
-apt-get install --yes --no-install-recommends devscripts pkg-config git-buildpackage equivs
+apt-get install --yes --no-install-recommends devscripts pkg-config git-buildpackage equivs locales
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+locale-gen
 mk-build-deps --install --remove --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' ${SRC_DIR}/debian/control
 cd ${SRC_DIR}
 git checkout .travis.yml || true
