@@ -30,8 +30,8 @@ sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --include=${CHROOT_PACKAGES
 if [ ! -z "${FOREIGN}" ]
 then
     sudo cp /usr/bin/qemu-$(dpkg-architecture -a${TRAVIS_DEBIAN_TARGET_ARCH} -qDEB_HOST_GNU_CPU)-static ${CHROOT_DIR}/usr/bin/
+    sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
 fi
-sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
 sudo sbuild-createchroot --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${FOREIGN} --setup-only ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 
 sudo chroot ${CHROOT_DIR} /bin/bash -x <<EOF
