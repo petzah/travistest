@@ -25,7 +25,10 @@ sudo add-apt-repository --yes 'deb http://archive.ubuntu.com/ubuntu xenial main 
 sudo apt-get update
 sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
 sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --include=${CHROOT_PACKAGES} --exclude=${CHROOT_PACKAGES_EXCLUDE} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
-sudo cp /usr/bin/qemu-$(dpkg-architecture -a${TRAVIS_DEBIAN_TARGET_ARCH} -qDEB_HOST_GNU_CPU)-static ${CHROOT_DIR}/usr/bin/
+if [ ! -z "${FOREIGN}" ]
+then
+    sudo cp /usr/bin/qemu-$(dpkg-architecture -a${TRAVIS_DEBIAN_TARGET_ARCH} -qDEB_HOST_GNU_CPU)-static ${CHROOT_DIR}/usr/bin/
+fi
 sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
 #sudo echo "en_US.UTF-8 UTF-8" >> ${CHROOT_DIR}/etc/locale.gen
 #sudo chroot ${CHROOT_DIR} /usr/sbin/locale-gen
