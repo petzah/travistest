@@ -36,7 +36,7 @@ sudo sbuild-createchroot --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${FOREIGN} --setup-
 
 sudo chroot ${CHROOT_DIR} /bin/bash -x <<EOF
 apt-get install --yes --no-install-recommends devscripts pkg-config git-buildpackage equivs
-mk-build-deps --host-arch ${TRAVIS_DEBIAN_TARGET_ARCH} --install --remove --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' ${SRC_DIR}/debian/control
+mk-build-deps --install --remove --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' ${SRC_DIR}/debian/control
 cd ${SRC_DIR}
 git checkout .travis.yml || true
 git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
