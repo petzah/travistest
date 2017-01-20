@@ -12,7 +12,7 @@ SRC_DIR="/src"
 BUILD_DIR="/build"
 CHROOT_PACKAGES="fakeroot,build-essential,locales"
 CHROOT_PACKAGES_EXCLUDE="init,systemd-sysv"
-
+qemu_arch=""
 # borrowed from qemu-debootstrap
 case "${TRAVIS_DEBIAN_TARGET_ARCH}" in
   alpha|arm|armeb|i386|m68k|mips|mipsel|mips64el|ppc64|sh4|sh4eb|sparc|sparc64|s390x)
@@ -37,7 +37,7 @@ case "${TRAVIS_DEBIAN_TARGET_ARCH}" in
     qemu_arch="ppc64le"
   ;;
   *)
-    die "Sorry, I don't know how to support arch %s" "$arch"
+    die "Sorry, I can't support this arch"
   ;;
 esac
 
