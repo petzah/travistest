@@ -10,7 +10,7 @@ HOST_PACKAGES="debootstrap qemu-user-static binfmt-support sbuild"
 CHROOT_DIR="$(pwd)/chroot"
 SRC_DIR="/src"
 BUILD_DIR="/build"
-CHROOT_PACKAGES="fakeroot build-essential devscripts pkg-config git-buildpackage equivs locales lintian"
+CHROOT_PACKAGES="fakeroot build-essential devscripts pkg-config git-buildpackage equivs lintian"
 CHROOT_PACKAGES_EXCLUDE="init,systemd-sysv"
 QEMUARCH=""
 
@@ -70,10 +70,8 @@ fi
 
 sudo sbuild-createchroot --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${FOREIGN} --setup-only ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 
-sudo chroot ${CHROOT_DIR} /bin/bash -x <<EOF
+sudo chroot ${CHROOT_DIR} /bin/bash -ex <<EOF
 apt-get install --yes --no-install-recommends ${CHROOT_PACKAGES}
-echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-locale-gen
 cd ${SRC_DIR}
 mk-build-deps --install --remove --tool "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes" debian/control
 git checkout .travis.yml || true
