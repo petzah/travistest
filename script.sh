@@ -10,7 +10,7 @@ HOST_PACKAGES="debootstrap qemu-user-static binfmt-support sbuild"
 CHROOT_DIR="$(pwd)/chroot"
 SRC_DIR="/src"
 BUILD_DIR="/build"
-CHROOT_PACKAGES="fakeroot build-essential devscripts pkg-config git-buildpackage equivs locales"
+CHROOT_PACKAGES="fakeroot build-essential devscripts pkg-config git-buildpackage equivs locales lintian"
 CHROOT_PACKAGES_EXCLUDE="init,systemd-sysv"
 QEMUARCH=""
 
