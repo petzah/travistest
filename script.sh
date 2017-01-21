@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -xeu
 
 TRAVIS_DEBIAN_TARGET_ARCH="${TRAVIS_DEBIAN_TARGET_ARCH:-$(dpkg --print-architecture)}"
@@ -58,9 +58,11 @@ sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --include=${CHROOT_PACKAGES
 
 if [ ! -z "${FOREIGN}" ]
 then
-    sudo cp /usr/bin/qemu-${QEMUARCH}-static ${CHROOT_DIR}/usr/bin/
-    sudo tail -f ${CHROOT_DIR}/debootstrap/debootstrap.log &
-    sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
+    sudo bash -x <<EOF
+cp /usr/bin/qemu-${QEMUARCH}-static ${CHROOT_DIR}/usr/bin/
+tail -f ${CHROOT_DIR}/debootstrap/debootstrap.log &
+chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
+EOF
 fi
 
 sudo sbuild-createchroot --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${FOREIGN} --setup-only ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
