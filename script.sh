@@ -13,6 +13,7 @@ BUILD_DIR="/build"
 CHROOT_PACKAGES="fakeroot build-essential devscripts pkg-config git-buildpackage equivs locales"
 CHROOT_PACKAGES_EXCLUDE="init,systemd-sysv"
 QEMUARCH=""
+
 # borrowed from qemu-debootstrap
 case "${TRAVIS_DEBIAN_TARGET_ARCH}" in
   alpha|arm|armeb|i386|m68k|mips|mipsel|mips64el|ppc64|sh4|sh4eb|sparc|sparc64|s390x)
@@ -53,7 +54,7 @@ git fetch
 rsync -aP --remove-source-files --exclude=$(basename ${CHROOT_DIR}) . ${CHROOT_DIR}/${SRC_DIR}/
 #mv * .travis.yml .git .gitignore ${CHROOT_DIR}/${SRC_DIR} || true
 
-sudo add-apt-repository --yes 'deb http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse' # we need newer qemu-user-static
+sudo add-apt-repository --yes "deb http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse" # we need newer qemu-user-static
 sudo apt-get update
 sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
 sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --exclude=${CHROOT_PACKAGES_EXCLUDE} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
