@@ -55,12 +55,14 @@ sudo add-apt-repository --yes 'deb http://archive.ubuntu.com/ubuntu xenial main 
 sudo apt-get update
 sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
 sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --include=${CHROOT_PACKAGES} --exclude=${CHROOT_PACKAGES_EXCLUDE} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
+
 if [ ! -z "${FOREIGN}" ]
 then
     sudo cp /usr/bin/qemu-${qemu_arch}-static ${CHROOT_DIR}/usr/bin/
     sudo tail -f ${CHROOT_DIR}/debootstrap/debootstrap.log &
     sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
 fi
+
 sudo sbuild-createchroot --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${FOREIGN} --setup-only ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 
 sudo chroot ${CHROOT_DIR} /bin/bash -x <<EOF
