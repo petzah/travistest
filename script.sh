@@ -10,7 +10,7 @@ HOST_PACKAGES="debootstrap qemu-user-static binfmt-support sbuild"
 CHROOT_DIR="$(pwd)/chroot"
 SRC_DIR="/src"
 BUILD_DIR="/build"
-CHROOT_PACKAGES="fakeroot,build-essential,locales"
+CHROOT_PACKAGES="fakeroot build-essential devscripts pkg-config git-buildpackage equivs locales"
 CHROOT_PACKAGES_EXCLUDE="init,systemd-sysv"
 QEMUARCH=""
 # borrowed from qemu-debootstrap
@@ -55,7 +55,7 @@ mv * .travis.yml .git .gitignore ${CHROOT_DIR}/${SRC_DIR} || true
 sudo add-apt-repository --yes 'deb http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse' # we need newer qemu-user-static
 sudo apt-get update
 sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
-sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --include=${CHROOT_PACKAGES} --exclude=${CHROOT_PACKAGES_EXCLUDE} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
+sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --exclude=${CHROOT_PACKAGES_EXCLUDE} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 
 sleep 30
 
@@ -69,7 +69,7 @@ fi
 sudo sbuild-createchroot --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${FOREIGN} --setup-only ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 
 sudo chroot ${CHROOT_DIR} /bin/bash -x <<EOF
-apt-get install --yes --no-install-recommends devscripts pkg-config git-buildpackage equivs locales
+apt-get install --yes --no-install-recommends ${CHROOT_PACKAGES}
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 cd ${SRC_DIR}
