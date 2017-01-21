@@ -12,29 +12,29 @@ SRC_DIR="/src"
 BUILD_DIR="/build"
 CHROOT_PACKAGES="fakeroot,build-essential,locales"
 CHROOT_PACKAGES_EXCLUDE="init,systemd-sysv"
-qemu_arch=""
+QEMUARCH=""
 # borrowed from qemu-debootstrap
 case "${TRAVIS_DEBIAN_TARGET_ARCH}" in
   alpha|arm|armeb|i386|m68k|mips|mipsel|mips64el|ppc64|sh4|sh4eb|sparc|sparc64|s390x)
-    qemu_arch="${TRAVIS_DEBIAN_TARGET_ARCH}"
+    QEMUARCH="${TRAVIS_DEBIAN_TARGET_ARCH}"
   ;;
   amd64)
-    qemu_arch="x86_64"
+    QEMUARCH="x86_64"
   ;;
   armel|armhf)
-    qemu_arch="arm"
+    QEMUARCH="arm"
   ;;
   arm64)
-    qemu_arch="aarch64"
+    QEMUARCH="aarch64"
   ;;
   lpia)
-    qemu_arch="i386"
+    QEMUARCH="i386"
   ;;
   powerpc|powerpcspe)
-    qemu_arch="ppc"
+    QEMUARCH="ppc"
   ;;
   ppc64el)
-    qemu_arch="ppc64le"
+    QEMUARCH="ppc64le"
   ;;
   *)
     die "Sorry, I can't support this arch"
@@ -58,7 +58,7 @@ sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --include=${CHROOT_PACKAGES
 
 if [ ! -z "${FOREIGN}" ]
 then
-    sudo cp /usr/bin/qemu-${qemu_arch}-static ${CHROOT_DIR}/usr/bin/
+    sudo cp /usr/bin/qemu-${QEMUARCH}-static ${CHROOT_DIR}/usr/bin/
     sudo tail -f ${CHROOT_DIR}/debootstrap/debootstrap.log &
     sudo chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
 fi
