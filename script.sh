@@ -63,6 +63,7 @@ sleep 1
 
 if [ ! -z "${FOREIGN}" ]; then
     sudo bash -x <<EOF
+mkidr -p /usr/bin
 cp /usr/bin/qemu-${QEMUARCH}-static ${CHROOT_DIR}/usr/bin/
 tail -f ${CHROOT_DIR}/debootstrap/debootstrap.log &
 chroot ${CHROOT_DIR} ./debootstrap/debootstrap --second-stage
