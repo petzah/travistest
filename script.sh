@@ -57,7 +57,7 @@ rsync -aP --remove-source-files --exclude=$(basename ${CHROOT_DIR}) . ${CHROOT_D
 sudo add-apt-repository --yes "deb http://archive.ubuntu.com/ubuntu xenial main restricted universe multiverse" # we need newer qemu-user-static
 sudo apt-get update
 sudo apt-get install --yes --no-install-recommends ${HOST_PACKAGES}
-sudo debootstrap ${FOREIGN} --verbose --no-check-gpg --exclude=${CHROOT_PACKAGES_EXCLUDE} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
+sudo debootstrap ${FOREIGN} --variant=minibase --verbose --no-check-gpg --exclude=${CHROOT_PACKAGES_EXCLUDE} --arch=${TRAVIS_DEBIAN_TARGET_ARCH} ${TRAVIS_DEBIAN_SUITE} ${CHROOT_DIR} ${TRAVIS_DEBIAN_MIRROR}
 
 sleep 30
 
