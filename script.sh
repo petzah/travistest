@@ -11,7 +11,7 @@ CHROOT_DIR="$(pwd)/chroot"
 SRC_DIR="/src"
 BUILD_DIR="/build"
 CHROOT_PACKAGES="fakeroot build-essential devscripts pkg-config git-buildpackage equivs lintian"
-CHROOT_PACKAGES_EXCLUDE="init,systemd-sysv"
+CHROOT_PACKAGES_EXCLUDE="init,systemd-sysv,tzdata"
 QEMUARCH=""
 
 # borrowed from qemu-debootstrap
