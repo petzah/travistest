@@ -5,6 +5,8 @@ TRAVIS_DEBIAN_TARGET_ARCH="${TRAVIS_DEBIAN_TARGET_ARCH:-$(dpkg --print-architect
 TRAVIS_DEBIAN_SUITE="${TRAVIS_DEBIAN_SUITE:-}"
 TRAVIS_DEBIAN_MIRROR="${TRAVIS_DEBIAN_MIRROR:-http://httpredir.debian.org/debian/}"
 TRAVIS_DEBIAN_GIT_BUILDPACKAGE_OPTIONS="${TRAVIS_DEBIAN_GIT_BUILDPACKAGE_OPTIONS:-}"
+SOURCE="$(dpkg-parsechangelog | awk '/^Source:/ { print $2 }')"
+VERSION="$(dpkg-parsechangelog | awk '/^Version:/ { print $2 }')"
 
 HOST_PACKAGES="debootstrap qemu-user-static binfmt-support sbuild"
 CHROOT_DIR="$(pwd)/chroot"
@@ -78,4 +80,6 @@ git checkout .travis.yml || true
 for X in \$(git branch -r | grep -v HEAD); do git branch --track \$(echo "\${X}" | perl -pe 's:^.*?/::') \${X} || true; done
 gbp buildpackage ${TRAVIS_DEBIAN_GIT_BUILDPACKAGE_OPTIONS} --git-ignore-branch --git-export-dir=${BUILD_DIR} --git-builder='debuild -i -I -uc -us -sa'
 ls -l ${BUILD_DIR}
+dpkg -i ${BUILD_DIR}/${SOURCE}_${VERSION}_${TRAVIS_DEBIAN_TARGET_ARCH}.deb
+apt-get -f --yes install
 EOF
